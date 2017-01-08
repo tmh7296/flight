@@ -1,5 +1,6 @@
-import requests
+import requests,schedule,time
 from bs4 import BeautifulSoup
+from twilio.rest import TwilioRestClient
 
 def parse(htmlText):
 	page = BeautifulSoup(htmlText, 'html.parser')
@@ -11,17 +12,24 @@ def parse(htmlText):
 	for flight in flights:
 		flight = str(flight)
 		index = flight.find(priceString)
-		newIndex = index + len(priceString)
-		price = ""
-		while flight[newIndex].isdigit():
-			price += flight[newIndex]
-			newIndex += 1
-		if flight.find(directionString) != -1:
-			inBoundPrice.append(price)
+		if index != -1:
+			newIndex = index + len(priceString)
+			price = ""
+			while flight[newIndex].isdigit():
+				price += flight[newIndex]
+				newIndex += 1
+			if flight.find(directionString) != -1:
+				inBoundPrice.append(price)
+			else:
+				outBoundPrice.append(price)
 		else:
-			outBoundPrice.append(price)
-	print("The cheapest outbound flight is: $"+ str(min(outBoundPrice)))
-	print("The cheapest inbound flight is: $"+ str(min(inBoundPrice)))	
+			pass
+	lowestOutBoundFare = (min(outBoundPrice))
+	lowestInBoundFare = (min(inBoundPrice))
+	if int(lowestOutBoundFare) < 200 or int(lowestInBoundFare) < 200:
+		message = "Cheapest outbound flight: $"+lowestOutBoundFare+ ", "\
+				"Cheapest inbound flight: $"+lowestInBoundFare
+		twilio(message)
 		
 def scrape():
 	payload = {
@@ -38,7 +46,21 @@ def scrape():
 		'submitButton':'true'
 	}
 	r = requests.post("https://www.southwest.com/flight/search-flight.html", data=payload)
-	#print(r.text)
 	parse(r.text)
 	
-scrape()
+def twilio(message):
+	ACCOUNT_SID = "AC264c684935140ea87c7792548d0d6643"
+	AUTH_TOKEN = "b7d5274a2b08366cee41981959e005ad"
+
+	client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
+	message = client.sms.messages.create(to="+16105859087",
+                                     from_="+14846854493",
+                                     body=message)
+
+
+schedule.every(2).minutes.do(scrape)
+#schedule.every().day.at("1:00").do(scrape)
+
+while 1:
+   schedule.run_pending()
+   time.sleep(1)									
