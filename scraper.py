@@ -1,11 +1,10 @@
 import requests, schedule, time, os, random
 from bs4 import BeautifulSoup
 from twilio.rest import TwilioRestClient
+from flask import Flask
 
-if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+app = Flask(__name__)
+app.run(environ.get('PORT'))
 
 def parseSouthWest(htmlText):
 	page = BeautifulSoup(htmlText, 'html.parser')
