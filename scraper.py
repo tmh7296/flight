@@ -62,7 +62,7 @@ def twilio(message):
 
 
 times = [1,2,3,4,5]		 
-schedule.every(random.choice(times)).minutes.do(scrapeSouthWest)							 
+schedule.every(2).minutes.do(scrapeSouthWest)							 
 #times = ['22:00','23:00','00:00','01:00','02:00']			 
 #schedule.every().day.at(random.choice(times)).do(scrapeSouthWest)
 
