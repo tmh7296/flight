@@ -1,8 +1,8 @@
-import requests,schedule,time
+import requests, schedule, time, os, random
 from bs4 import BeautifulSoup
 from twilio.rest import TwilioRestClient
 
-def parse(htmlText):
+def parseSouthWest(htmlText):
 	page = BeautifulSoup(htmlText, 'html.parser')
 	priceString = '<span class="currency_symbol">$</span>'
 	directionString = 'id="In'
@@ -31,7 +31,7 @@ def parse(htmlText):
 				"Cheapest inbound flight: $"+lowestInBoundFare
 		twilio(message)
 		
-def scrape():
+def scrapeSouthWest():
 	payload = {
 		'returnAirport':'',
 		'twoWayTrip':'true',
@@ -49,17 +49,18 @@ def scrape():
 	parse(r.text)
 	
 def twilio(message):
-	ACCOUNT_SID = "AC264c684935140ea87c7792548d0d6643"
-	AUTH_TOKEN = "b7d5274a2b08366cee41981959e005ad"
-
+	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')"AC264c684935140ea87c7792548d0d6643"
+	AUTH_TOKEN = os.environ.get('AUTH_TOKEN')"b7d5274a2b08366cee41981959e005ad"
 	client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 	message = client.sms.messages.create(to="+16105859087",
                                      from_="+14846854493",
                                      body=message)
 
 
-schedule.every(2).minutes.do(scrape)
-#schedule.every().day.at("1:00").do(scrape)
+times = [1,2,3,4,5]		 
+schedule.every(random.choice(times)).minutes.do(scrapeSouthWest)							 
+#times = ['22:00','23:00','00:00','01:00','02:00']			 
+#schedule.every().day.at(random.choice(times)).do(scrapeSouthWest)
 
 while 1:
    schedule.run_pending()
