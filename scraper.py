@@ -49,8 +49,8 @@ def scrapeSouthWest():
 	parse(r.text)
 	
 def twilio(message):
-	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')"AC264c684935140ea87c7792548d0d6643"
-	AUTH_TOKEN = os.environ.get('AUTH_TOKEN')"b7d5274a2b08366cee41981959e005ad"
+	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
+	AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
 	client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 	message = client.sms.messages.create(to="+16105859087",
                                      from_="+14846854493",
