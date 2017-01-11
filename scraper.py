@@ -1,10 +1,7 @@
-import requests, schedule, time, os, random
+import requests, time, os, random
 from bs4 import BeautifulSoup
 from twilio.rest import TwilioRestClient
-from flask import Flask
 
-app = Flask(__name__)
-app.run(environ.get('PORT'))
 
 def parseSouthWest(htmlText):
 	page = BeautifulSoup(htmlText, 'html.parser')
@@ -61,11 +58,4 @@ def twilio(message):
                                      body=message)
 
 
-times = [1,2,3,4,5]		 
-schedule.every(2).minutes.do(scrapeSouthWest)							 
-#times = ['22:00','23:00','00:00','01:00','02:00']			 
-#schedule.every().day.at(random.choice(times)).do(scrapeSouthWest)
-
-while 1:
-   schedule.run_pending()
-   time.sleep(1)									
+scrapeSouthWest()								
