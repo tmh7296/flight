@@ -6,10 +6,12 @@ from celery.task import periodic_task
 from datetime import timedelta
 
 REDIS URL = os.environ.get("REDISTOGO_URL", "redis://localhost")
+print("not doing things")
 
 celery = Celery("tasks", broker=REDIS_URL)
 
 def parseSouthWest(htmlText):
+	print("parsing")
 	page = BeautifulSoup(htmlText, 'html.parser')
 	priceString = '<span class="currency_symbol">$</span>'
 	directionString = 'id="In'
@@ -39,10 +41,8 @@ def parseSouthWest(htmlText):
 		twilio(message)
 	
 def twilio(message):
-	ACCOUNT_SID = 'AC264c684935140ea87c7792548d0d6643'
-	AUTH_TOKEN = 'b7d5274a2b08366cee41981959e005ad'
-	#ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
-	#AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
+	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
+	AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
 	client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 	message = client.messages.create(to="+16105859087",
                                      from_="+14846854493",
