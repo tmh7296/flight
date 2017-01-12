@@ -27,7 +27,7 @@ def parseSouthWest(htmlText):
 			pass
 	lowestOutBoundFare = (min(outBoundPrice))
 	lowestInBoundFare = (min(inBoundPrice))
-	if int(lowestOutBoundFare) < 200 or int(lowestInBoundFare) < 200:
+	if int(lowestOutBoundFare) < 150 or int(lowestInBoundFare) < 150:
 		message = "Cheapest outbound flight: $"+lowestOutBoundFare+ ", "\
 				"Cheapest inbound flight: $"+lowestInBoundFare
 		twilio(message)
