@@ -1,14 +1,6 @@
 import requests, time, os, random
 from bs4 import BeautifulSoup
 from twilio.rest import TwilioRestClient
-from celery import Celery
-from celery.task import periodic_task
-from datetime import timedelta
-
-REDIS URL = os.environ.get("REDISTOGO_URL", "redis://localhost")
-print("not doing things")
-
-celery = Celery("tasks", broker=REDIS_URL)
 
 def parseSouthWest(htmlText):
 	print("parsing")
@@ -48,7 +40,6 @@ def twilio(message):
                                      from_="+14846854493",
                                      body=message)
 
-@periodic_task(run_every=timedelta(minutes=2))
 def scrapeSouthWest():
 	payload = {
 		'returnAirport':'',
@@ -65,3 +56,5 @@ def scrapeSouthWest():
 	}
 	r = requests.post("https://www.southwest.com/flight/search-flight.html", data=payload)
 	parseSouthWest(r.text)
+
+scrapeSouthWest()
