@@ -1,1 +1,1 @@
-script: python scraper.py
+worker: celery -A tasks worker -B

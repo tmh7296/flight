@@ -1,7 +1,13 @@
 import requests, time, os, random
 from bs4 import BeautifulSoup
 from twilio.rest import TwilioRestClient
+from celery import Celery
+from celery.task import periodic_task
+from datetime import timedelta
 
+REDIS URL = os.environ.get("REDISTOGO_URL", "redis://localhost")
+
+celery = Celery("tasks", broker=REDIS_URL)
 
 def parseSouthWest(htmlText):
 	page = BeautifulSoup(htmlText, 'html.parser')
@@ -31,7 +37,18 @@ def parseSouthWest(htmlText):
 		message = "Cheapest outbound flight: $"+lowestOutBoundFare+ ", "\
 				"Cheapest inbound flight: $"+lowestInBoundFare
 		twilio(message)
-		
+	
+def twilio(message):
+	ACCOUNT_SID = 'AC264c684935140ea87c7792548d0d6643'
+	AUTH_TOKEN = 'b7d5274a2b08366cee41981959e005ad'
+	#ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
+	#AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
+	client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
+	message = client.messages.create(to="+16105859087",
+                                     from_="+14846854493",
+                                     body=message)
+
+@periodic_task(run_every=timedelta(minutes=2))
 def scrapeSouthWest():
 	payload = {
 		'returnAirport':'',
@@ -47,15 +64,4 @@ def scrapeSouthWest():
 		'submitButton':'true'
 	}
 	r = requests.post("https://www.southwest.com/flight/search-flight.html", data=payload)
-	parse(r.text)
-	
-def twilio(message):
-	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
-	AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
-	client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
-	message = client.sms.messages.create(to="+16105859087",
-                                     from_="+14846854493",
-                                     body=message)
-
-
-scrapeSouthWest()								
+	parseSouthWest(r.text)
