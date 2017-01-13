@@ -53,7 +53,7 @@ def scrapeSouthWest():
 		'destinationAirport':os.environ.get('DEST_AIRPORT'),
 		'outboundDateString':os.environ.get('LEAVE_DATE'),
 		'returnDateString':os.environ.get('RETURN_DATE'),
-		'adultPassengerCount':os.environ.get('TICKET_NUMBER'),
+		'adultPassengerCount':os.environ.get('NUM_TICKETS'),
 		'seniorPassengerCount':'0',
 		'promoCode':'',
 		'submitButton':'true'
