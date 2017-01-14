@@ -33,8 +33,9 @@ def parseSouthWest(htmlText):
 					"Cheapest inbound flight: $"+lowestInBoundFare
 			twilio(message)
 	except Exception as e:
-		message = "Something's fucked up"
-		twilio(message)
+		message = e
+		print(message)
+		twilio("Something's fucked, man: " + message)
 	
 def twilio(message):
 	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
