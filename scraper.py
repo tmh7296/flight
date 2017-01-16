@@ -6,6 +6,7 @@ def parseSouthWest(htmlText):
 	try:
 		print("parsing")
 		page = BeautifulSoup(htmlText, 'html.parser')
+		print(str(page))
 		priceString = '<span class="currency_symbol">$</span>'
 		directionString = 'id="In'
 		flights = page.find_all('div', {'class':'product_info'})
@@ -35,7 +36,7 @@ def parseSouthWest(htmlText):
 	except Exception as e:
 		message = e
 		print(message)
-		twilio("Something's fucked, man: " + message)
+		twilio("Something's fucked, man: " + str(message))
 	
 def twilio(message):
 	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
