@@ -2,18 +2,23 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from twilio.rest import Client
 import requests, time, os, random
 
 
-originAirport = os.environ.get('ORIGIN_AIRPORT')
-destinationAirport = os.environ.get('DEST_AIRPORT')
-outboundDateString = os.environ.get('LEAVE_DATE')
-returnDateString = os.environ.get('RETURN_DATE')
+originAirport = os.environ.get("ORIGIN_AIRPORT")
+destinationAirport = os.environ.get("DEST_AIRPORT")
+outboundDateString = os.environ.get("LEAVE_DATE")
+returnDateString = os.environ.get("RETURN_DATE")
 
 def flightPage():
-	driver = webdriver.Chrome()
+	chrome_options = Options()
+	chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+	chrome_options.add_argument("--disable-gpu")
+	chrome_options.add_argument("--no-sandbox")
+	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 	driver.get("https://www.southwest.com/")
 	departure_airport = driver.find_element_by_id("air-city-departure")
 	arrival_airport = driver.find_element_by_id("air-city-arrival")
