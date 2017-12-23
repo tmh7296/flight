@@ -68,13 +68,14 @@ def parseSouthWest(htmlText):
 		print("$" + str(lowestOutBoundFare))
 		print("$" + str(lowestInBoundFare))
 		if int(lowestOutBoundFare) < 1500 or int(lowestInBoundFare) < 1500:
-			message = "Cheapest outbound flight: $"+lowestOutBoundFare+ ", "\
-					"Cheapest inbound flight: $"+lowestInBoundFare
+			message = str(originAirport) + " -> " + str(destinationAirport) + \
+				": Cheapest outbound flight via southwest: $"+lowestOutBoundFare+ ", " + \
+					"Cheapest inbound flight via southwest: $"+lowestInBoundFare
 			twilio(message, BRI_NUM)
 	except Exception as e:
 		message = e
 		print(message)
-		twilio("Something's fucked, man: " + str(message, NUM))
+		twilio("Something's fucked, man: " + str(message), NUM)
 
 def twilio(message, number):
 	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
