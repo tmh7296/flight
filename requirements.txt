@@ -30,6 +30,5 @@ six==1.10.0
 tinydb==3.3.1
 twilio==6.10.0
 urllib3==1.22
-web.py==0.38
 webencodings==0.5
 Werkzeug==0.12.2
