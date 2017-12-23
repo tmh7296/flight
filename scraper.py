@@ -12,6 +12,8 @@ originAirport = os.environ.get("ORIGIN_AIRPORT")
 destinationAirport = os.environ.get("DEST_AIRPORT")
 outboundDateString = os.environ.get("LEAVE_DATE")
 returnDateString = os.environ.get("RETURN_DATE")
+NUM = os.environ.get('MY_NUMBER')
+BRI_NUM = os.environ.get('BRI_NUMBER')
 
 def flightPage():
 	chrome_options = Options()
@@ -68,19 +70,18 @@ def parseSouthWest(htmlText):
 		if int(lowestOutBoundFare) < 1500 or int(lowestInBoundFare) < 1500:
 			message = "Cheapest outbound flight: $"+lowestOutBoundFare+ ", "\
 					"Cheapest inbound flight: $"+lowestInBoundFare
-			twilio(message)
+			twilio(message, BRI_NUM)
 	except Exception as e:
 		message = e
 		print(message)
-		twilio("Something's fucked, man: " + str(message))
+		twilio("Something's fucked, man: " + str(message, NUM))
 
-def twilio(message):
+def twilio(message, number):
 	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
 	AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
-	NUM = os.environ.get('MY_NUMBER')
 	TWILIO_NUM = os.environ.get('TWILIO_NUMBER')
 	client = Client(ACCOUNT_SID, AUTH_TOKEN)
-	message = client.messages.create(to=NUM,
+	message = client.messages.create(to=number,
                                      from_=TWILIO_NUM,
                                      body=message)
 
