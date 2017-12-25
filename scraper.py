@@ -22,7 +22,9 @@ def flightPage():
 	#chrome_options.add_argument("--no-sandbox")
 	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 	driver.get("https://www.southwest.com/")
-	departure_airport = driver.find_element_by_id("air-city-departure")
+	departure_airport = WebDriverWait(driver,
+									  10).until(EC.element_to_be_clickable((By.ID,
+																			"air-city-departure")))
 	arrival_airport = driver.find_element_by_id("air-city-arrival")
 	departure_airport.send_keys(originAirport)
 	arrival_airport.send_keys(destinationAirport)
