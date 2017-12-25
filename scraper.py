@@ -82,9 +82,7 @@ def twilio(message):
 	NUM = os.environ.get('MY_NUMBER')
 	TWILIO_NUM = os.environ.get('TWILIO_NUMBER')
 	client = Client(ACCOUNT_SID, AUTH_TOKEN)
-	message = client.messages.create(to=NUM,
-                                     from_=TWILIO_NUM,
-                                     body=message)
+	client.messages.create(to=NUM, from_=TWILIO_NUM, body=message)
 
 
 flightPage()
