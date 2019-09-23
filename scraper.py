@@ -74,7 +74,7 @@ def parseSouthWest(htmlText):
 	except Exception as e:
 		message = e
 		print(message)
-		twilio("Something's fucked, man: " + str(message))
+		twilio("Something's wrong, man: " + str(message))
 
 def twilio(message):
 	ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
